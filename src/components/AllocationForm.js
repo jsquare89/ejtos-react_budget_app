@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react';
 import { AppContext } from '../context/AppContext';
 
 const AllocationForm = (props) => {
-    const { dispatch,remaining  } = useContext(AppContext);
+    const { dispatch,remaining, currency  } = useContext(AppContext);
 
     const [name, setName] = useState('');
     const [cost, setCost] = useState('');
@@ -34,6 +34,14 @@ const AllocationForm = (props) => {
             }
     };
 
+    const handleCostInput = (event) => {
+        if(event.target.value > remaining){
+            alert(`The value should not exceed the remaining budget.`);
+            return;
+        }
+        setCost(event.target.value)
+    }
+
     return (
         <div>
             <div className='row'>
@@ -59,15 +67,19 @@ const AllocationForm = (props) => {
                         <option defaultValue value="Add" name="Add">Add</option>
                 <option value="Reduce" name="Reduce">Reduce</option>
                   </select>
-
+                    
+                    <label className="text-end me-1" htmlFor="cost" 
+                            style={{ marginLeft: '2rem' , size: 10}}>{currency}</label>
                     <input
                         required='required'
                         type='number'
                         id='cost'
                         value={cost}
-                        style={{ marginLeft: '2rem' , size: 10}}
-                        onChange={(event) => setCost(event.target.value)}>
+                        onChange={handleCostInput}>
                         </input>
+
+                
+                  
 
                     <button className="btn btn-primary" onClick={submitEvent} style={{ marginLeft: '2rem' }}>
                         Save
